@@ -1,32 +1,49 @@
-// Function to get user data from localStorage
-function getUserData() {
-    const userData = JSON.parse(localStorage.getItem('userData'));
-    return userData;
+// Show login page initially
+document.getElementById("loginPage").classList.add("show");
+
+// Switch to Register Page
+function switchToRegister() {
+    document.getElementById("loginPage").classList.remove("show");
+    document.getElementById("registerPage").classList.add("show");
 }
 
-// Function to display the access key and balance
-function displayUserData() {
-    const userData = getUserData();
+// Switch to Login Page
+function switchToLogin() {
+    document.getElementById("registerPage").classList.remove("show");
+    document.getElementById("successPage").classList.remove("show");
+    document.getElementById("loginPage").classList.add("show");
+}
 
-    if (userData) {
-        // Display access key and balance
-        document.getElementById('accessKeyDisplay').innerText = userData.accessKey;
-        document.getElementById('balanceDisplay').innerText = userData.balance;
+// Function to Add New Record
+function AddRow() {
+    var usernamee = document.getElementById("usernamee").value;
+    var passwordd = document.getElementById("passwordd").value;
+    var email = document.getElementById("email").value;
+    var phone = document.getElementById("phone").value;
+    
+    // Check if all fields are filled
+    if (usernamee === "" || passwordd === "" || email === "" || phone === "") {
+        alert("Please fill in all fields.");
+        return false;
     } else {
-        // If user is not logged in or no user data is available
-        alert("No user data found. Please log in.");
+        // Replace with your server-side logic to add record (e.g., google.script.run.AddRecord)
+        console.log("Account Created:", usernamee, email, phone);
+        document.getElementById("registerPage").classList.remove("show");
+        document.getElementById("successPage").classList.add("show");
     }
 }
 
-// Call displayUserData when the page loads
-window.onload = displayUserData;
+// Login User Function
+function LoginUser() {
+    var username = document.getElementById("username").value;
+    var password = document.getElementById("password").value;
 
-// Logout function
-function logout() {
-    localStorage.removeItem('userData'); // Remove user data from localStorage
-    localStorage.removeItem('userHashedAccessKey'); // Remove hashed access key
-    window.location.href = "LOGIN.html"; // Redirect to login page
+    // Replace with your server-side logic (e.g., google.script.run.checkLogin)
+    if (username === "test" && password === "password123") { // Example check
+        document.getElementById("displayusername").innerText = username;
+        document.getElementById("loginPage").classList.remove("show");
+        document.getElementById("welcomePage").classList.add("show");
+    } else {
+        document.getElementById("errorMessage").innerText = "Invalid username or password.";
+    }
 }
-
-// Add event listener to logout button
-document.getElementById('logoutBtn').addEventListener('click', logout);
