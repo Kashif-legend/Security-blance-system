@@ -4,55 +4,253 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dynamic Payment Page</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Main Styling */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #74b9ff, #a29bfe);
+            overflow: hidden;
+        }
+
+        .payment-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+            transition: transform 0.3s ease-in-out;
+            animation: slideIn 0.5s ease forwards;
+            transform: translateY(50px);
+            opacity: 0;
+        }
+
+        .payment-container h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .input-field, .button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .input-field:focus {
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            outline: none;
+        }
+
+        .button {
+            background-color: #6c5ce7;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .button:hover {
+            background-color: #4e3ecf;
+            transform: translateY(-2px);
+        }
+
+        .payment-options, .qr-code {
+            display: none;
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .payment-options img {
+            width: 120px;
+            height: 120px;
+            margin: 10px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .payment-options {
+            display: flex;
+            justify-content: space-around;
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        .suggested-amounts {
+            margin: 10px 0;
+            display: flex;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+        }
+
+        .suggested-amounts button {
+            width: 60px;
+            height: 40px;
+            font-size: 14px;
+            margin: 5px;
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            background-color: #6c5ce7;
+            color: white;
+        }
+
+        .suggested-amounts button:hover {
+            background-color: #4e3ecf;
+        }
+    </style>
 </head>
 <body>
 
 <div class="payment-container">
-    <h2>Enter Payment Details</h2>
+    <h2>Make a Payment</h2>
 
-    <!-- Amount Input Section -->
+    <!-- Amount Section -->
     <div id="amountSection">
-        <label for="amount">Enter Amount:</label>
+        <label for="amount">Enter Amount</label>
         <input type="number" id="amount" class="input-field" placeholder="Enter amount" required>
-        <button class="button" onclick="showPaymentDetails()">Continue</button>
+        <div class="suggested-amounts">
+            <button onclick="setSuggestedAmount(10)">10</button>
+            <button onclick="setSuggestedAmount(20)">20</button>
+            <button onclick="setSuggestedAmount(50)">50</button>
+            <button onclick="setSuggestedAmount(100)">100</button>
+            <button onclick="setSuggestedAmount(200)">200</button>
+            <button onclick="setSuggestedAmount(500)">500</button>
+            <button onclick="setSuggestedAmount(1000)">1000</button>
+        </div>
+        <button class="button" onclick="showPaymentOptions()">Continue</button>
     </div>
 
-    <!-- Payment Details Section -->
-    <div id="paymentDetailsSection" style="display:none;">
-        <h3>Payment Method</h3>
-
-        <!-- Display amount after entering -->
-        <div class="details">
-            <p>Amount: ₹<span id="paymentAmount"></span></p>
+    <!-- Payment Options Section -->
+    <div class="payment-options" id="paymentOptions">
+        <div class="payment-methods">
+            <img src="https://i.imgur.com/0opwZc5.png" alt="Paytm" onclick="openPaymentApp('paytm')">
+            <img src="https://i.imgur.com/TuudHFC.png" alt="Google Pay" onclick="openPaymentApp('googlepay')">
+            <img src="https://i.imgur.com/IUrHFYl.png" alt="PhonePe" onclick="openPaymentApp('phonepe')">
+            <img src="https://i.imgur.com/TuudHFC.png" alt="UPI" onclick="openPaymentApp('upi')">
         </div>
-
-        <!-- Payment Method Images -->
-        <div class="payment-options">
-            <img src="https://i.imgur.com/0opwZc5.png" alt="Paytm" onclick="selectPayment('paytm')" class="payment-image">
-            <img src="https://i.imgur.com/TuudHFC.png" alt="Google Pay" onclick="selectPayment('googlepay')" class="payment-image">
-            <img src="https://i.imgur.com/IUrHFYl.png" alt="PhonePe" onclick="selectPayment('phonepe')" class="payment-image">
-            <img src="https://i.imgur.com/TuudHFC.png" alt="UPI" onclick="selectPayment('upi')" class="payment-image">
-        </div>
-
-        <!-- QR Code Section -->
-        <div class="qr-code" id="qrCodeContainer" style="display:none;">
-            <h4>Scan to Pay</h4>
+        <div class="qr-code" id="qrCodeContainer">
+            <h3>Scan to Pay</h3>
             <img id="qrCode" alt="QR Code">
         </div>
+    </div>
 
-        <!-- UTR Number Input (Moved to bottom) -->
-        <div class="utr-section">
-            <label for="utr">Enter UTR Number:</label>
-            <input type="text" id="utr" class="input-field" placeholder="Enter UTR" required>
-        </div>
-
-        <!-- Submit Button (Moved to bottom) -->
-        <button class="button" onclick="submitDetails()">Submit</button>
+    <!-- UTR Section -->
+    <div id="utrSection">
+        <label for="utr">Enter UTR Number</label>
+        <input type="text" id="utr" class="input-field" placeholder="Enter UTR" required>
+        <button class="button" onclick="submitDetails()">Submit UTR</button>
     </div>
 </div>
 
-<script src="script.js"></script>
+<script>
+    let selectedPaymentMethod = "";
+
+    // Set suggested amount
+    function setSuggestedAmount(amount) {
+        document.getElementById('amount').value = amount;
+    }
+
+    // Show Payment Options and QR Code
+    function showPaymentOptions() {
+        const amount = document.getElementById('amount').value;
+        if (!amount || amount <= 0) {
+            alert("Please enter a valid amount.");
+            return;
+        }
+
+        // Hide the amount input and show payment options
+        document.getElementById('amountSection').style.display = "none";
+        document.getElementById('paymentOptions').style.display = "block";
+        document.getElementById('paymentOptions').style.opacity = 1;
+
+        const upiId = "mktrader68@ybl";
+        const qrData = `upi://pay?pa=${upiId}&pn=YourName&am=${amount}`;
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrData)}`;
+        document.getElementById('qrCode').src = qrUrl;
+        document.getElementById('qrCodeContainer').style.display = "block";
+    }
+
+    // Open respective payment app
+    function openPaymentApp(paymentMethod) {
+        const amount = document.getElementById('amount').value;
+        if (!amount || amount <= 0) {
+            alert("Please enter a valid amount.");
+            return;
+        }
+
+        const upiId = "mktrader68@ybl";
+        let redirectUrl;
+
+        switch (paymentMethod) {
+            case "paytm":
+                redirectUrl = `paytmmp://cash_wallet?featuretype=money_transfer&upi://pay?ver=01&mode=01&pa=${upiId}&pn=YourName&mc=5192&qrMedium=06&tn=Payment&am=${amount}`;
+                break;
+            case "googlepay":
+                redirectUrl = `upi://pay?pa=${upiId}&pn=YourName&am=${amount}`;
+                break;
+            case "phonepe":
+                redirectUrl = `phonepe://pay?pa=${upiId}&pn=YourName&am=${amount}`;
+                break;
+            case "upi":
+                redirectUrl = `upi://pay?pa=${upiId}&pn=YourName&am=${amount}`;
+                break;
+            default:
+                alert("Invalid payment method.");
+                return;
+        }
+
+        // Redirect to the payment app (based on the selected method)
+        window.location.href = redirectUrl;
+    }
+
+    // Submit UTR details
+    function submitDetails() {
+        const utr = document.getElementById('utr').value;
+        if (!utr) {
+            alert("Please enter the UTR number.");
+            return;
+        }
+        alert("Payment details submitted successfully with UTR: " + utr);
+    }
+</script>
 
 </body>
-</html>
+    </html>
