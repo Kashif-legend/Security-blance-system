@@ -27,23 +27,12 @@
             <p>Amount: ₹<span id="paymentAmount"></span></p>
         </div>
 
-        <!-- Payment Method Dropdown -->
-        <div class="custom-dropdown" onclick="toggleDropdown()">
-            <div id="selectedOption" class="selected-option">Choose Payment Method</div>
-            <div id="optionsList" class="options-list">
-                <div class="option" onclick="selectOption('paytm')">
-                    <img src="https://i.imgur.com/0opwZc5.png" alt="Paytm"> Paytm
-                </div>
-                <div class="option" onclick="selectOption('googlepay')">
-                    <img src="https://i.imgur.com/TuudHFC.png" alt="Google Pay"> Google Pay
-                </div>
-                <div class="option" onclick="selectOption('phonepe')">
-                    <img src="https://i.imgur.com/IUrHFYl.png" alt="PhonePe"> PhonePe
-                </div>
-                <div class="option" onclick="selectOption('upi')">
-                    <img src="https://i.imgur.com/TuudHFC.png" alt="UPI"> UPI
-                </div>
-            </div>
+        <!-- Payment Method Images -->
+        <div class="payment-options">
+            <img src="https://i.imgur.com/0opwZc5.png" alt="Paytm" onclick="selectPayment('paytm')" class="payment-image">
+            <img src="https://i.imgur.com/TuudHFC.png" alt="Google Pay" onclick="selectPayment('googlepay')" class="payment-image">
+            <img src="https://i.imgur.com/IUrHFYl.png" alt="PhonePe" onclick="selectPayment('phonepe')" class="payment-image">
+            <img src="https://i.imgur.com/TuudHFC.png" alt="UPI" onclick="selectPayment('upi')" class="payment-image">
         </div>
 
         <!-- QR Code Section -->
@@ -52,11 +41,13 @@
             <img id="qrCode" alt="QR Code">
         </div>
 
-        <!-- UTR Number Input -->
-        <label for="utr">Enter UTR Number:</label>
-        <input type="text" id="utr" class="input-field" placeholder="Enter UTR" required>
+        <!-- UTR Number Input (Moved to bottom) -->
+        <div class="utr-section">
+            <label for="utr">Enter UTR Number:</label>
+            <input type="text" id="utr" class="input-field" placeholder="Enter UTR" required>
+        </div>
 
-        <!-- Submit Button -->
+        <!-- Submit Button (Moved to bottom) -->
         <button class="button" onclick="submitDetails()">Submit</button>
     </div>
 </div>
