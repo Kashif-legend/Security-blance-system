@@ -1,4 +1,4 @@
-// Function to hash the access key (already provided in your code)
+// Function to hash the access key
 async function hashKey(key) {
     const encoder = new TextEncoder();
     const data = encoder.encode(key);
@@ -46,7 +46,13 @@ function displayUserInfo() {
     const depositBalance = localStorage.getItem('depositBalance');
     const winningBalance = localStorage.getItem('winningBalance');
 
-    document.getElementById('displayUserId').innerText = userId || 'Not Logged In'; // Display the User ID
+    // Make sure to show the User ID correctly after login
+    if (userId) {
+        document.getElementById('displayUserId').innerText = userId; // Display the User ID
+    } else {
+        document.getElementById('displayUserId').innerText = 'Not Logged In'; // If no User ID is found
+    }
+
     document.getElementById('depositBalance').innerText = depositBalance || '$0';
     document.getElementById('winningBalance').innerText = winningBalance || '$0';
 }
