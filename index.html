@@ -8,26 +8,26 @@
 </head>
 <body>
 
-<!-- First Page (Amount Entry) -->
-<div id="amountPage" class="page">
-    <h2>Enter Amount</h2>
-    <label for="amount">Enter Amount:</label>
-    <input type="number" id="amount" class="input-field" placeholder="Enter amount" required>
-    <button class="button" onclick="showPaymentDetailsPage()">Continue</button>
-</div>
+<div class="payment-container">
+    <h2>Enter Payment Details</h2>
 
-<!-- Second Page (Payment Details) -->
-<div id="paymentDetailsPage" class="page" style="display:none;">
-    <h2>Payment Details</h2>
-    <div class="details">
-        <p>Amount: <span id="paymentAmount"></span></p>
+    <!-- Amount Input Section -->
+    <div id="amountSection">
+        <label for="amount">Enter Amount:</label>
+        <input type="number" id="amount" class="input-field" placeholder="Enter amount" required>
+        <button class="button" onclick="showPaymentDetails()">Continue</button>
     </div>
 
-    <label for="utr">Enter UTR Number:</label>
-    <input type="text" id="utr" class="input-field" placeholder="Enter UTR" required>
+    <!-- Payment Details Section -->
+    <div id="paymentDetailsSection" style="display:none;">
+        <h3>Payment Method</h3>
 
-    <div id="paymentOptions">
-        <h3>Select Payment Method</h3>
+        <!-- Display amount after entering -->
+        <div class="details">
+            <p>Amount: ₹<span id="paymentAmount"></span></p>
+        </div>
+
+        <!-- Payment Method Dropdown -->
         <div class="custom-dropdown" onclick="toggleDropdown()">
             <div id="selectedOption" class="selected-option">Choose Payment Method</div>
             <div id="optionsList" class="options-list">
@@ -46,15 +46,22 @@
             </div>
         </div>
 
-        <div class="qr-code" id="qrCodeContainer">
-            <h3>Scan to Pay</h3>
+        <!-- QR Code Section -->
+        <div class="qr-code" id="qrCodeContainer" style="display:none;">
+            <h4>Scan to Pay</h4>
             <img id="qrCode" alt="QR Code">
         </div>
-    </div>
 
-    <button class="button" onclick="submitDetails()">Submit</button>
+        <!-- UTR Number Input -->
+        <label for="utr">Enter UTR Number:</label>
+        <input type="text" id="utr" class="input-field" placeholder="Enter UTR" required>
+
+        <!-- Submit Button -->
+        <button class="button" onclick="submitDetails()">Submit</button>
+    </div>
 </div>
 
 <script src="script.js"></script>
+
 </body>
-                            </html>
+</html>
