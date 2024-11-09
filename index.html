@@ -1,129 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Page</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      background: #f3f4f6;
-    }
-    .container {
-      width: 300px;
-      background: white;
-      border-radius: 8px;
-      padding: 20px;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-      text-align: center;
-    }
-    h1 {
-      color: #333;
-    }
-    input[type="text"], input[type="password"], input[type="email"], input[type="number"] {
-      width: 100%;
-      padding: 8px;
-      margin: 8px 0;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 16px;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: none;
-      background: #4CAF50;
-      color: white;
-      font-size: 16px;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background 0.3s;
-    }
-    button:hover {
-      background: #45a049;
-    }
-    #errorMessage, #successMessage {
-      color: red;
-      margin: 8px 0;
-      font-size: 14px;
-    }
-    .hidden {
-      display: none;
-    }
-  </style>
-</head>
-<body>
+<html>
+  <head>
+    <base target="_top">
+    <script>
+      function AddRow() {
+        const usernamee = document.getElementById("usernamee").value;
+        const passwordd = document.getElementById("passwordd").value;
+        const email = document.getElementById("email").value;
+        const phone = document.getElementById("phone").value;
 
-  <div class="container" id="loginContainer">
-    <h1>Login</h1>
-    <input type="text" id="username" placeholder="Username">
-    <input type="password" id="password" placeholder="Password">
-    <button onclick="loginUser()">Login</button>
-    <div id="errorMessage" class="hidden"></div>
-    <p>Don't have an account? <a href="#" onclick="showRegister()">Register</a></p>
-  </div>
-
-  <div class="container hidden" id="registerContainer">
-    <h1>Register</h1>
-    <input type="text" id="newUsername" placeholder="Name">
-    <input type="password" id="newPassword" placeholder="Create Password">
-    <input type="email" id="email" placeholder="Email">
-    <input type="number" id="phone" placeholder="Phone Number">
-    <button onclick="registerUser()">Create Account</button>
-    <div id="successMessage" class="hidden"></div>
-    <p>Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
-  </div>
-
-  <script>
-    function showRegister() {
-      document.getElementById("loginContainer").classList.add("hidden");
-      document.getElementById("registerContainer").classList.remove("hidden");
-      document.getElementById("errorMessage").classList.add("hidden");
-    }
-
-    function showLogin() {
-      document.getElementById("registerContainer").classList.add("hidden");
-      document.getElementById("loginContainer").classList.remove("hidden");
-      document.getElementById("successMessage").classList.add("hidden");
-    }
-
-    function loginUser() {
-      var username = document.getElementById("username").value;
-      var password = document.getElementById("password").value;
-      google.script.run.withSuccessHandler(function(result) {
-        if (result === 'TRUE') {
-          window.location.href = "https://sites.google.com/view/gamers-win/home";
-        } else {
-          document.getElementById("errorMessage").textContent = "Invalid username or password";
-          document.getElementById("errorMessage").classList.remove("hidden");
+        if (usernamee === "" || passwordd === "" || email === "" || phone === "") {
+          alert("Please fill in all fields.");
+          return;
         }
-      }).checkLogin(username, password);
-    }
 
-    function registerUser() {
-      var username = document.getElementById("newUsername").value;
-      var password = document.getElementById("newPassword").value;
-      var email = document.getElementById("email").value;
-      var phone = document.getElementById("phone").value;
-
-      if (username && password && email && phone) {
-        google.script.run.withSuccessHandler(function() {
-          document.getElementById("successMessage").textContent = "Account created successfully!";
-          document.getElementById("successMessage").classList.remove("hidden");
-          setTimeout(showLogin, 2000);
-        }).AddRecord(username, password, email, phone);
-      } else {
-        document.getElementById("successMessage").textContent = "Please fill all fields.";
-        document.getElementById("successMessage").classList.remove("hidden");
+        google.script.run
+          .withSuccessHandler(function() {
+            alert("Account created successfully!");
+            document.getElementById("page2_id1").className = "page2_id1-off";
+            document.getElementById("page3_id1").className = "page3_id1";
+          })
+          .withFailureHandler(function(error) {
+            console.error("Error creating account:", error);
+            alert("Error creating account. Please try again.");
+          })
+          .AddRecord(usernamee, passwordd, email, phone);
       }
-    }
-  </script>
 
-</body>
-    </html>
+      function LoginUser() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        google.script.run
+          .withSuccessHandler(function(output) {
+            if (output === 'TRUE') {
+              document.getElementById("displayusername").innerHTML = username;
+              document.getElementById("page1_id1").className = "page1_class1-off";
+              document.getElementById("page4_id1").className = "page4_id1";
+            } else {
+              alert("Invalid username or password");
+              document.getElementById("errorMessage").innerText = "Invalid username or password";
+            }
+          })
+          .withFailureHandler(function(error) {
+            console.error("Error during login:", error);
+            alert("Error during login. Please try again.");
+          })
+          .checkLogin(username, password);
+      }
+
+      function showCreateAccount() {
+        document.getElementById("page1_id1").className = "page1_class1-off";
+        document.getElementById("page2_id1").className = "page2_id1";
+      }
+
+      function showLogin() {
+        document.getElementById("page3_id1").className = "page3_id1-off";
+        document.getElementById("page1_id1").className = "page1_id1";
+      }
+    </script>
+    <style>
+      /* Add any existing styling here */
+    </style>
+  </head>
+  <body>
+    <center>
+      <!-- Include your HTML structure here -->
+    </center>
+  </body>
+</html>
