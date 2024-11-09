@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Balance</title>
+</head>
+<body>
+    <h2>User Balance</h2>
+    <p>Access Key: <span id="accessKeyDisplay"></span></p>
+    <p>Balance: <span id="balanceDisplay"></span></p>
+
+    <script>
+        // Function to get balance from Google Apps Script
+        async function getBalance() {
+            // Retrieve the logged-in user's access key from localStorage
+            const accessKey = localStorage.getItem('accessKey');  // Assuming the key is stored in localStorage after login
+
+            if (!accessKey) {
+                document.getElementById('balanceDisplay').innerText = "Error: No Access Key found!";
+                return;
+            }
+
+            const url = `https://script.google.com/macros/s/AKfycbzyzRoOkjTthXgBrgLZVX6C2vamhOjascdoWhKf3w/dev?accessKey=${accessKey}`;
+            
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.balance) {
+                    document.getElementById('balanceDisplay').innerText = data.balance;
+                    document.getElementById('accessKeyDisplay').innerText = accessKey;
+                } else {
+                    document.getElementById('balanceDisplay').innerText = "Error: User not found!";
+                }
+            } catch (error) {
+                document.getElementById('balanceDisplay').innerText = "Error fetching data.";
+            }
+        }
+
+        // Call getBalance function when the page loads
+        window.onload = getBalance;
+    </script>
+</body>
+</html>
