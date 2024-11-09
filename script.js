@@ -12,6 +12,7 @@ async function login() {
     const enteredKey = document.getElementById('accessKey').value;
     const hashedEnteredKey = await hashKey(enteredKey);
     const storedHashedKey = localStorage.getItem('userHashedAccessKey');
+    const storedUserId = localStorage.getItem('userId'); // Get the user ID
 
     if (hashedEnteredKey === storedHashedKey && storedHashedKey) {
         alert("Login successful!");
@@ -26,7 +27,11 @@ async function createAccessKey() {
     const newKey = prompt("Enter a unique access key:");
     if (newKey) {
         const hashedKey = await hashKey(newKey);
+        const userId = "user" + Math.floor(Math.random() * 100000); // Generate a unique User ID
+
+        // Store the hashed key, user ID, and initial balance in localStorage
         localStorage.setItem('userHashedAccessKey', hashedKey);
+        localStorage.setItem('userId', userId); // Store the user ID
         localStorage.setItem('depositBalance', 100);  // Example Deposit Balance
         localStorage.setItem('winningBalance', 50);  // Example Winning Balance
         alert("Access Key created successfully! You can now use it to log in.");
@@ -35,11 +40,13 @@ async function createAccessKey() {
     }
 }
 
-// Display user balance on the homepage
-function displayBalance() {
+// Display user balance and user ID on the homepage
+function displayUserInfo() {
+    const userId = localStorage.getItem('userId');  // Get the stored User ID
     const depositBalance = localStorage.getItem('depositBalance');
     const winningBalance = localStorage.getItem('winningBalance');
 
+    document.getElementById('displayUserId').innerText = userId || 'Not Logged In'; // Display the User ID
     document.getElementById('depositBalance').innerText = depositBalance || '$0';
     document.getElementById('winningBalance').innerText = winningBalance || '$0';
 }
@@ -47,6 +54,7 @@ function displayBalance() {
 // Logout function
 function logout() {
     localStorage.removeItem('userHashedAccessKey'); // Clear stored access key
+    localStorage.removeItem('userId');              // Clear user ID
     localStorage.removeItem('depositBalance');     // Clear deposit balance
     localStorage.removeItem('winningBalance');     // Clear winning balance
     alert("You have logged out.");
@@ -56,7 +64,7 @@ function logout() {
 // Event listener for logout
 document.getElementById('logoutBtn').addEventListener('click', logout);
 
-// Call displayBalance to show balance when page is loaded
+// Call displayUserInfo to show user ID and balance when the page is loaded
 window.onload = function() {
-    displayBalance();
+    displayUserInfo();
 };
