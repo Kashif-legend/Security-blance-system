@@ -1,5 +1,5 @@
-// Show the payment details page after entering the amount
-function showPaymentDetailsPage() {
+// Show payment details section after entering the amount
+function showPaymentDetails() {
     const amount = document.getElementById('amount').value;
 
     if (!amount || amount <= 0) {
@@ -7,18 +7,19 @@ function showPaymentDetailsPage() {
         return;
     }
 
-    // Hide the first page and show the second page
-    document.getElementById('amountPage').style.display = "none";
-    document.getElementById('paymentDetailsPage').style.display = "block";
+    // Hide amount input section and show payment details section
+    document.getElementById('amountSection').style.display = "none";
+    document.getElementById('paymentDetailsSection').style.display = "block";
 
-    // Display the entered amount on the second page
-    document.getElementById('paymentAmount').textContent = "₹" + amount;
+    // Display the entered amount
+    document.getElementById('paymentAmount').textContent = amount;
 
     // Create the UPI QR Code
     const upiId = "mktrader68@ybl";
     const qrData = `upi://pay?pa=${upiId}&pn=YourName&am=${amount}`;
     const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrData)}`;
 
+    // Display the QR Code
     document.getElementById('qrCode').src = qrUrl;
     document.getElementById('qrCodeContainer').style.display = "block";
 }
@@ -42,7 +43,7 @@ function selectOption(method) {
     toggleDropdown();
 }
 
-// Submit the payment details and redirect to WhatsApp
+// Submit payment details and redirect to WhatsApp
 function submitDetails() {
     const amount = document.getElementById('amount').value;
     const utr = document.getElementById('utr').value;
