@@ -12,10 +12,10 @@ async function login() {
     const enteredKey = document.getElementById('accessKey').value;
     const hashedEnteredKey = await hashKey(enteredKey);
     const storedHashedKey = localStorage.getItem('userHashedAccessKey');
-    const storedUserId = localStorage.getItem('userId'); // Get the user ID
 
     if (hashedEnteredKey === storedHashedKey && storedHashedKey) {
         alert("Login successful!");
+        localStorage.setItem('currentAccessKey', enteredKey); // Store current access key after login
         window.location.href = "index.html"; // Redirect to the homepage
     } else {
         alert("Invalid Access Key. Please try again or create a new key.");
@@ -27,32 +27,30 @@ async function createAccessKey() {
     const newKey = prompt("Enter a unique access key:");
     if (newKey) {
         const hashedKey = await hashKey(newKey);
-        const userId = "user" + Math.floor(Math.random() * 100000); // Generate a unique User ID
-
-        // Store the hashed key, user ID, and initial balance in localStorage
+        
+        // Store the hashed access key in localStorage
         localStorage.setItem('userHashedAccessKey', hashedKey);
-        localStorage.setItem('userId', userId); // Store the user ID
-        localStorage.setItem('depositBalance', 100);  // Example Deposit Balance
-        localStorage.setItem('winningBalance', 50);  // Example Winning Balance
+        localStorage.setItem('currentAccessKey', newKey); // Store the actual access key as well
         alert("Access Key created successfully! You can now use it to log in.");
     } else {
         alert("Access Key creation canceled.");
     }
 }
 
-// Display user balance and user ID on the homepage
+// Display user access key and balance information
 function displayUserInfo() {
-    const userId = localStorage.getItem('userId');  // Get the stored User ID
+    const accessKey = localStorage.getItem('currentAccessKey');  // Get the stored Access Key
     const depositBalance = localStorage.getItem('depositBalance');
     const winningBalance = localStorage.getItem('winningBalance');
 
-    // Make sure to show the User ID correctly after login
-    if (userId) {
-        document.getElementById('displayUserId').innerText = userId; // Display the User ID
+    // Display Access Key
+    if (accessKey) {
+        document.getElementById('displayAccessKey').innerText = accessKey; // Display the Access Key
     } else {
-        document.getElementById('displayUserId').innerText = 'Not Logged In'; // If no User ID is found
+        document.getElementById('displayAccessKey').innerText = 'Not Logged In'; // If no access key found
     }
 
+    // Display Deposit and Winning Balance
     document.getElementById('depositBalance').innerText = depositBalance || '$0';
     document.getElementById('winningBalance').innerText = winningBalance || '$0';
 }
@@ -60,7 +58,7 @@ function displayUserInfo() {
 // Logout function
 function logout() {
     localStorage.removeItem('userHashedAccessKey'); // Clear stored access key
-    localStorage.removeItem('userId');              // Clear user ID
+    localStorage.removeItem('currentAccessKey');   // Clear current access key
     localStorage.removeItem('depositBalance');     // Clear deposit balance
     localStorage.removeItem('winningBalance');     // Clear winning balance
     alert("You have logged out.");
@@ -70,7 +68,7 @@ function logout() {
 // Event listener for logout
 document.getElementById('logoutBtn').addEventListener('click', logout);
 
-// Call displayUserInfo to show user ID and balance when the page is loaded
+// Call displayUserInfo to show the access key and balance when the page is loaded
 window.onload = function() {
     displayUserInfo();
 };
