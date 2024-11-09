@@ -3,20 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard</title>
+    <title>Secure Access Key Login</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<!-- Balance Display Section -->
-<div class="balance-container">
-    <h2>Welcome, <span id="userId">User</span>!</h2>
-    <p>User ID: <span id="displayUserId"></span></p>
-    <p>Deposit Balance: <span id="depositBalance">$0</span></p>
-    <p>Winning Balance: <span id="winningBalance">$0</span></p>
-    <button id="logoutBtn" class="button">Logout</button>
+<div class="login-container">
+    <h2>Login with Access Key</h2>
+    <input type="text" id="accessKey" class="input-field" placeholder="Enter Access Key">
+    <button class="button" id="loginBtn">Login</button>
+    <div class="link" id="createKeyLink">Create an Access Key</div>
 </div>
 
-<script src="script.js"></script>
+<div class="home-container" id="homeContainer" style="display:none;">
+    <h3>User Information</h3>
+    <p>Access Key: <span id="displayAccessKey">Not Logged In</span></p>
+    <p>Deposit Balance: <span id="depositBalance">$0</span></p>
+    <p>Winning Balance: <span id="winningBalance">$0</span></p>
+    <button class="button" id="logoutBtn">Logout</button>
+</div>
+
+<script>
+    // Function to login the user
+    async function login() {
+        const accessKey = document.getElementById('accessKey').value;
+        
+        google.script.run.withSuccessHandler(function(userData) {
+            if (userData) {
+                // Display the user data (Access Key, Deposit Balance, Winning Balance)
+                document.getElementById('displayAccessKey').innerText = accessKey;
+                document.getElementById('depositBalance').innerText = '$' + userData.depositBalance;
+                document.getElementById('winningBalance').innerText = '$' + userData.winningBalance;
+                
+                // Show the home container with user information
+                document.getElementById('homeContainer').style.display = 'block';
+                alert("Login successful!");
+            } else {
+                alert("Invalid Access Key.");
+            }
+        }).getUserData(accessKey);
+    }
+
+    // Event listener for login button
+    document.getElementById('loginBtn').addEventListener('click', login);
+
+    // Logout function
+    function logout() {
+        document.getElementById('homeContainer').style.display = 'none';
+        alert("You have logged out.");
+    }
+
+    // Event listener for logout button
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+</script>
+
 </body>
 </html>
