@@ -1,71 +1,53 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <base target="_top">
-    <script>
-      function AddRow() {
-        const usernamee = document.getElementById("usernamee").value;
-        const passwordd = document.getElementById("passwordd").value;
-        const email = document.getElementById("email").value;
-        const phone = document.getElementById("phone").value;
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Payment Page</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-        if (usernamee === "" || passwordd === "" || email === "" || phone === "") {
-          alert("Please fill in all fields.");
-          return;
-        }
+<div class="payment-container">
+    <h2>Make a Payment</h2>
+    <label for="amount">Enter Amount</label>
+    <input type="number" id="amount" class="input-field" placeholder="Enter amount" required>
+    <button class="button" onclick="showPaymentOptions()">Continue</button>
+</div>
 
-        google.script.run
-          .withSuccessHandler(function() {
-            alert("Account created successfully!");
-            document.getElementById("page2_id1").className = "page2_id1-off";
-            document.getElementById("page3_id1").className = "page3_id1";
-          })
-          .withFailureHandler(function(error) {
-            console.error("Error creating account:", error);
-            alert("Error creating account. Please try again.");
-          })
-          .AddRecord(usernamee, passwordd, email, phone);
-      }
+<div id="paymentOptions" class="payment-container">
+    <div class="qr-code" id="qrCodeContainer">
+        <h3>Scan to Pay</h3>
+        <img id="qrCode" alt="QR Code">
+    </div>
 
-      function LoginUser() {
-        const username = document.getElementById("username").value;
-        const password = document.getElementById("password").value;
+    <label for="paymentMethod">Select Payment Method</label>
+    <div class="custom-dropdown" onclick="toggleDropdown()">
+        <div id="selectedOption" class="selected-option">Choose an option</div>
+        <div id="optionsList" class="options-list">
+            <div class="option" onclick="selectOption('paytm')">
+                <img src="https://i.imgur.com/0opwZc5.png" alt="Paytm"> Paytm
+            </div>
+            <div class="option" onclick="selectOption('googlepay')">
+                <img src="https://i.imgur.com/TuudHFC.png" alt="Google Pay"> Google Pay
+            </div>
+            <div class="option" onclick="selectOption('phonepe')">
+                <img src="https://i.imgur.com/IUrHFYl.png" alt="PhonePe"> PhonePe
+            </div>
+            <div class="option" onclick="selectOption('upi')">
+                <img src="https://i.imgur.com/TuudHFC.png" alt="UPI"> UPI
+            </div>
+        </div>
+    </div>
 
-        google.script.run
-          .withSuccessHandler(function(output) {
-            if (output === 'TRUE') {
-              document.getElementById("displayusername").innerHTML = username;
-              document.getElementById("page1_id1").className = "page1_class1-off";
-              document.getElementById("page4_id1").className = "page4_id1";
-            } else {
-              alert("Invalid username or password");
-              document.getElementById("errorMessage").innerText = "Invalid username or password";
-            }
-          })
-          .withFailureHandler(function(error) {
-            console.error("Error during login:", error);
-            alert("Error during login. Please try again.");
-          })
-          .checkLogin(username, password);
-      }
+    <label for="utr">Enter UTR Number</label>
+    <input type="text" id="utr" class="input-field" placeholder="Enter UTR Number" required>
 
-      function showCreateAccount() {
-        document.getElementById("page1_id1").className = "page1_class1-off";
-        document.getElementById("page2_id1").className = "page2_id1";
-      }
+    <button class="button" onclick="payNow()">Pay Now</button>
 
-      function showLogin() {
-        document.getElementById("page3_id1").className = "page3_id1-off";
-        document.getElementById("page1_id1").className = "page1_id1";
-      }
-    </script>
-    <style>
-      /* Add any existing styling here */
-    </style>
-  </head>
-  <body>
-    <center>
-      <!-- Include your HTML structure here -->
-    </center>
-  </body>
+    <button class="button" onclick="submitDetails()">Submit Payment Details</button>
+</div>
+
+<script src="script.js"></script>
+</body>
 </html>
