@@ -3,43 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Check Balance</title>
+    <title>Login and Registration</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h2>User Balance</h2>
-    <p>Access Key: <span id="accessKeyDisplay"></span></p>
-    <p>Balance: <span id="balanceDisplay"></span></p>
+    <div class="container hide" id="loginPage">
+        <h1>Login</h1>
+        <input type="text" id="username" class="input-field" placeholder="Username">
+        <input type="password" id="password" class="input-field" placeholder="Password">
+        <div id="errorMessage" class="error"></div>
+        <button class="button" onclick="LoginUser()">Login</button>
+        <p>If you don't have an account, <span onclick="switchToRegister()" class="link">Create New</span></p>
+    </div>
 
-    <script>
-        // Function to get balance from Google Apps Script
-        async function getBalance() {
-            // Retrieve the logged-in user's access key from localStorage
-            const accessKey = localStorage.getItem('accessKey');  // Assuming the key is stored in localStorage after login
+    <div class="container hide" id="registerPage">
+        <h1>Create Account</h1>
+        <input type="text" id="usernamee" class="input-field" placeholder="Name">
+        <input type="password" id="passwordd" class="input-field" placeholder="Create password">
+        <input type="text" id="email" class="input-field" placeholder="Email">
+        <input type="number" id="phone" class="input-field" placeholder="Phone no.">
+        <small class="error-message">Password must contain letters and numbers.</small>
+        <button class="button" onclick="AddRow()">Create</button>
+    </div>
 
-            if (!accessKey) {
-                document.getElementById('balanceDisplay').innerText = "Error: No Access Key found!";
-                return;
-            }
+    <div class="container hide" id="successPage">
+        <h2>Your account has been created successfully.</h2>
+        <button class="button" onclick="switchToLogin()">Login to Your Account</button>
+    </div>
 
-            const url = `https://script.google.com/macros/s/AKfycbzyzRoOkjTthXgBrgLZVX6C2vamhOjascdoWhKf3w/dev?accessKey=${accessKey}`;
-            
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-                
-                if (data.balance) {
-                    document.getElementById('balanceDisplay').innerText = data.balance;
-                    document.getElementById('accessKeyDisplay').innerText = accessKey;
-                } else {
-                    document.getElementById('balanceDisplay').innerText = "Error: User not found!";
-                }
-            } catch (error) {
-                document.getElementById('balanceDisplay').innerText = "Error fetching data.";
-            }
-        }
+    <div class="container hide" id="welcomePage">
+        <h2>Welcome, <span id="displayusername" class="highlight"></span>!</h2>
+        <h2>You are successfully logged in.</h2>
+    </div>
 
-        // Call getBalance function when the page loads
-        window.onload = getBalance;
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
