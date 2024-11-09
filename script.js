@@ -1,34 +1,32 @@
-// Function to fetch user balance using the access key
-async function fetchUserBalance() {
-    // Retrieve the stored access key from localStorage
-    const accessKey = localStorage.getItem('userHashedAccessKey');
-    if (!accessKey) {
-        alert("Please log in first.");
-        return;
-    }
+// Function to get user data from localStorage
+function getUserData() {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    return userData;
+}
 
-    // Display the user's access key on the page
-    document.getElementById('accessKeyDisplay').innerText = accessKey;
+// Function to display the access key and balance
+function displayUserData() {
+    const userData = getUserData();
 
-    // Construct the URL with the user's access key
-    const url = `https://script.google.com/macros/s/AKfycbzyzRoOkjTthXgBrgLZVX6C2vamhOjascdoWhKf3w/dev?accessKey=${accessKey}`;
-
-    // Send GET request to the Google Apps Script URL
-    const response = await fetch(url);
-
-    // Parse the JSON response
-    const result = await response.json();
-
-    // Check if the result contains balance data
-    if (result["Deposit Balance"] !== undefined) {
-        // Display the balance information
-        document.getElementById('depositBalance').innerText = result["Deposit Balance"];
-        document.getElementById('winningBalance').innerText = result["Winning Balance"];
+    if (userData) {
+        // Display access key and balance
+        document.getElementById('accessKeyDisplay').innerText = userData.accessKey;
+        document.getElementById('balanceDisplay').innerText = userData.balance;
     } else {
-        // If no balance data is found, display an error
-        alert("No balance information found for this user.");
+        // If user is not logged in or no user data is available
+        alert("No user data found. Please log in.");
     }
 }
 
-// Call the function to fetch and display the balance
-fetchUserBalance();
+// Call displayUserData when the page loads
+window.onload = displayUserData;
+
+// Logout function
+function logout() {
+    localStorage.removeItem('userData'); // Remove user data from localStorage
+    localStorage.removeItem('userHashedAccessKey'); // Remove hashed access key
+    window.location.href = "LOGIN.html"; // Redirect to login page
+}
+
+// Add event listener to logout button
+document.getElementById('logoutBtn').addEventListener('click', logout);
