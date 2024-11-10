@@ -28,21 +28,21 @@
     </div>
 
     <!-- Payment Options Section -->
-    <div class="payment-options" id="paymentOptions">
+    <div class="payment-options" id="paymentOptions" style="display:none;">
         <div class="payment-methods">
             <img src="https://i.imgur.com/0opwZc5.png" alt="Paytm" onclick="openPaymentApp('paytm')">
             <img src="https://i.imgur.com/TuudHFC.png" alt="Google Pay" onclick="openPaymentApp('googlepay')">
             <img src="https://i.imgur.com/IUrHFYl.png" alt="PhonePe" onclick="openPaymentApp('phonepe')">
             <img src="https://i.imgur.com/TuudHFC.png" alt="UPI" onclick="openPaymentApp('upi')">
         </div>
-        <div class="qr-code" id="qrCodeContainer">
+        <div class="qr-code" id="qrCodeContainer" style="display:none;">
             <h3>Scan to Pay</h3>
             <img id="qrCode" alt="QR Code">
         </div>
     </div>
 
     <!-- UTR Section -->
-    <div id="utrSection">
+    <div id="utrSection" style="display:none;">
         <label for="utr">Enter UTR Number</label>
         <input type="text" id="utr" class="input-field" placeholder="Enter UTR" required>
         <button class="button" onclick="submitDetails()">Submit UTR</button>
@@ -51,4 +51,4 @@
 
 <script src="scripts.js"></script>
 </body>
-</html>
+                </html>
