@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,48 +8,43 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-<div class="payment-container">
-    <h2>Make a Payment</h2>
-
-    <!-- Amount Section -->
-    <div id="amountSection">
-        <label for="amount">Enter Amount</label>
-        <input type="number" id="amount" class="input-field" placeholder="Enter amount" required>
-        <div class="suggested-amounts">
-            <button onclick="setSuggestedAmount(10)">10</button>
-            <button onclick="setSuggestedAmount(20)">20</button>
-            <button onclick="setSuggestedAmount(50)">50</button>
-            <button onclick="setSuggestedAmount(100)">100</button>
-            <button onclick="setSuggestedAmount(200)">200</button>
-            <button onclick="setSuggestedAmount(500)">500</button>
-            <button onclick="setSuggestedAmount(1000)">1000</button>
+    <div class="payment-container">
+        <h2>Make a Payment</h2>
+        <!-- Amount Section -->
+        <div id="amountSection">
+            <label for="amount">Enter Amount</label>
+            <input type="number" id="amount" class="input-field" placeholder="Enter amount" required>
+            <div class="suggested-amounts">
+                <button onclick="setSuggestedAmount(10)">10</button>
+                <button onclick="setSuggestedAmount(20)">20</button>
+                <button onclick="setSuggestedAmount(50)">50</button>
+                <button onclick="setSuggestedAmount(100)">100</button>
+                <button onclick="setSuggestedAmount(200)">200</button>
+                <button onclick="setSuggestedAmount(500)">500</button>
+                <button onclick="setSuggestedAmount(1000)">1000</button>
+            </div>
+            <button class="button" onclick="showPaymentOptions()">Continue</button>
         </div>
-        <button class="button" onclick="showPaymentOptions()">Continue</button>
-    </div>
-
-    <!-- Payment Options Section -->
-    <div class="payment-options" id="paymentOptions" style="display:none;">
-        <div class="payment-methods">
-            <img src="https://i.imgur.com/0opwZc5.png" alt="Paytm" onclick="openPaymentApp('paytm')">
-            <img src="https://i.imgur.com/TuudHFC.png" alt="Google Pay" onclick="openPaymentApp('googlepay')">
-            <img src="https://i.imgur.com/IUrHFYl.png" alt="PhonePe" onclick="openPaymentApp('phonepe')">
-            <img src="https://i.imgur.com/TuudHFC.png" alt="UPI" onclick="openPaymentApp('upi')">
+        <!-- Payment Options Section -->
+        <div class="payment-options" id="paymentOptions" style="display:none;">
+            <div class="payment-methods">
+                <img src="(link unavailable)" alt="Paytm" onclick="openPaymentApp('paytm')">
+                <img src="(link unavailable)" alt="Google Pay" onclick="openPaymentApp('googlepay')">
+                <img src="(link unavailable)" alt="PhonePe" onclick="openPaymentApp('phonepe')">
+                <img src="(link unavailable)" alt="UPI" onclick="openPaymentApp('upi')">
+            </div>
+            <div class="qr-code" id="qrCodeContainer" style="display:none;">
+                <h3>Scan to Pay</h3>
+                <img id="qrCode" alt="QR Code">
+            </div>
         </div>
-        <div class="qr-code" id="qrCodeContainer" style="display:none;">
-            <h3>Scan to Pay</h3>
-            <img id="qrCode" alt="QR Code">
+        <!-- UTR Section -->
+        <div id="utrSection" style="display:none;">
+            <label for="utr">Enter UTR Number</label>
+            <input type="text" id="utr" class="input-field" placeholder="Enter UTR" required>
+            <button class="button" onclick="submitDetails()">Submit UTR</button>
         </div>
     </div>
-
-    <!-- UTR Section -->
-    <div id="utrSection" style="display:none;">
-        <label for="utr">Enter UTR Number</label>
-        <input type="text" id="utr" class="input-field" placeholder="Enter UTR" required>
-        <button class="button" onclick="submitDetails()">Submit UTR</button>
-    </div>
-</div>
-
-<script src="scripts.js"></script>
+    <script src="scripts.js"></script>
 </body>
-                </html>
+</html>
