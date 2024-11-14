@@ -8,12 +8,11 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f8f9fa;
-            margin: 0;
-            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
         }
         .match-container {
             width: 300px;
@@ -22,10 +21,25 @@
             border-radius: 10px;
             overflow: hidden;
             text-align: center;
+            position: relative;
+        }
+        .match-image {
+            position: relative;
         }
         .match-image img {
             width: 100%;
             height: auto;
+        }
+        .join-button {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background-color: #28a745;
+            color: #fff;
+            padding: 5px 10px;
+            font-size: 14px;
+            border-radius: 5px;
+            text-decoration: none;
         }
         .match-details {
             padding: 20px;
@@ -33,10 +47,18 @@
         .match-details h3 {
             margin: 0 0 10px;
         }
-        .detail-item {
-            margin: 5px 0;
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
             font-size: 14px;
-            color: #555;
+            color: #333;
+            margin: 5px 0;
+        }
+        .countdown-timer {
+            font-size: 16px;
+            color: #d9534f;
+            font-weight: bold;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -44,18 +66,60 @@
 
 <div class="match-container">
     <div class="match-image">
-        <img src="https://i.imgur.com/mogjwdb.jpeg" alt="Match Image">
+        <img src="your-image-url.jpg" alt="Match Image">
+        <a id="join-btn" href="#" class="join-button">Join</a>
     </div>
     <div class="match-details">
         <h3>Match Details</h3>
-        <div class="detail-item">Per Kill: ₹20</div>
-        <div class="detail-item">Winning: ₹1000</div>
-        <div class="detail-item">Entry Fee: ₹50</div>
-        <div class="detail-item">Type: Solo</div>
-        <div class="detail-item">Map: Bermuda</div>
-        <div class="detail-item">Game: Free Fire</div>
+        <div id="match-id" class="detail-row"><strong>Match ID:</strong> </div>
+        <div class="detail-row">
+            <span>Entry Fee:</span> <span>₹50</span>
+        </div>
+        <div class="detail-row">
+            <span>Map:</span> <span>Bermuda</span>
+        </div>
+        <div class="detail-row">
+            <span>Per Kill:</span> <span>₹20</span>
+        </div>
+        <div class="detail-row">
+            <span>Time:</span> <span>5:00 PM</span>
+        </div>
+        <div id="timer" class="countdown-timer">Time Remaining: 00:00:00</div>
     </div>
 </div>
+
+<script>
+    // Generate unique 4-digit Match ID
+    const matchId = Math.floor(1000 + Math.random() * 9000);
+    document.getElementById('match-id').innerHTML += matchId;
+
+    // Countdown timer
+    function startCountdown(duration) {
+        let timer = duration, hours, minutes, seconds;
+        setInterval(function () {
+            hours = Math.floor(timer / 3600);
+            minutes = Math.floor((timer % 3600) / 60);
+            seconds = timer % 60;
+
+            hours = hours < 10 ? "0" + hours : hours;
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            document.getElementById('timer').textContent = `Time Remaining: ${hours}:${minutes}:${seconds}`;
+
+            if (--timer < 0) {
+                document.getElementById('timer').textContent = "Match has started!";
+                clearInterval(this);
+            }
+        }, 1000);
+    }
+
+    // Set countdown timer to 1 hour for demonstration (3600 seconds)
+    startCountdown(3600);
+
+    // Set Join button link with bot username and match ID
+    document.getElementById('join-btn').href = `https://t.me/playfftournamentbot?start=/joinmatch${matchId}`;
+</script>
 
 </body>
 </html>
