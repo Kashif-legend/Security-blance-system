@@ -7,96 +7,75 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .match-container {
-            width: 300px;
-            background-color: #fff;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-            overflow: hidden;
             text-align: center;
-            position: relative;
+            background-color: #f4f4f4;
         }
-        .match-image img {
+        .container {
             width: 100%;
-            height: auto;
+            max-width: 400px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .match-image {
+            width: 100%;
+            border-radius: 8px;
         }
         .match-details {
-            padding: 20px;
-        }
-        .match-details h3 {
-            margin: 0 0 10px;
-        }
-        .detail-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-            color: #333;
-            margin: 5px 0;
-        }
-        .countdown-timer {
-            font-size: 16px;
-            color: #d9534f;
-            font-weight: bold;
+            text-align: left;
             margin-top: 10px;
+            font-size: 1.1em;
+        }
+        #timer {
+            font-size: 1.2em;
+            margin: 15px 0;
+            color: #ff6347;
         }
         .join-button {
-            display: block;
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1.1em;
+            color: white;
             background-color: #28a745;
-            color: #fff;
-            padding: 10px;
-            font-size: 14px;
+            border: none;
             border-radius: 5px;
             text-decoration: none;
-            margin-top: 15px;
         }
     </style>
 </head>
 <body>
 
-<div class="match-container">
-    <div class="match-image">
-        <img src="https://i.imgur.com/mogjwdb.jpeg" alt="Match Image">
-    </div>
+<div class="container">
+    <img src="https://i.imgur.com/mogjwdb.jpeg" alt="Match Image" class="match-image">
+    <div id="timer">Time Remaining: Calculating...</div>
     <div class="match-details">
-        <h3>Match Details</h3>
-        <div id="match-id" class="detail-row"><strong>Match ID:</strong> </div>
-        <div class="detail-row">
-            <span>Entry Fee:</span> <span>₹50</span>
-        </div>
-        <div class="detail-row">
-            <span>Map:</span> <span>Bermuda</span>
-        </div>
-        <div class="detail-row">
-            <span>Per Kill:</span> <span>₹20</span>
-        </div>
-        <div class="detail-row">
-            <span>Time:</span> <span>5:00 PM</span>
-        </div>
-        <div id="timer" class="countdown-timer">Time Remaining: 00:00:00</div>
-        <a id="join-btn" href="#" class="join-button">Join Match</a>
+        <p><strong>Match ID:</strong> <span id="match-id"></span></p>
+        <p><strong>Entry Fee:</strong> ₹50</p>
+        <p><strong>Map:</strong> Bermuda</p>
+        <p><strong>Per Kill:</strong> ₹10</p>
+        <p><strong>Time:</strong> 5:00 PM</p>
+        <p><strong>Game:</strong> Free Fire</p>
     </div>
+    <a id="join-btn" href="#" class="join-button">Join Match</a>
 </div>
 
 <script>
     // Generate unique 4-digit Match ID
     const matchId = Math.floor(1000 + Math.random() * 9000);
-    document.getElementById('match-id').innerHTML += matchId;
+    document.getElementById('match-id').textContent = matchId;
 
-    // Countdown timer for a fixed match time (5:00 PM)
+    // Countdown timer
     function startCountdown() {
         const now = new Date();
         const matchTime = new Date();
 
-        matchTime.setHours(17, 0, 0, 0); // Set match time to 5:00 PM
+        // Set the match time to 5:00 PM today
+        matchTime.setHours(17, 0, 0, 0);
 
-        // If current time is past today's 5:00 PM, set the countdown for tomorrow's 5:00 PM
+        // If it's past 5:00 PM, set match time to 5:00 PM tomorrow
         if (now > matchTime) {
             matchTime.setDate(matchTime.getDate() + 1);
         }
@@ -105,12 +84,15 @@
             const now = new Date().getTime();
             const distance = matchTime - now;
 
+            // Calculate hours, minutes, and seconds
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
+            // Display the result
             document.getElementById('timer').textContent = `Time Remaining: ${hours}:${minutes}:${seconds}`;
 
+            // If the countdown is over
             if (distance < 0) {
                 clearInterval(timerInterval);
                 document.getElementById('timer').textContent = "Match has started!";
@@ -118,12 +100,13 @@
         }, 1000);
     }
 
-    // Start countdown
+    // Start the countdown timer
     startCountdown();
 
-    // Set Join button link with bot username and match ID
+    // Updated Join button link with encoded message
     const joinBtn = document.getElementById('join-btn');
-    joinBtn.href = `https://t.me/playfftournamentbot?start=${encodeURIComponent(`/joinmatch${matchId}`)}`;
+    const preFilledMessage = encodeURIComponent(`/joinmatch ${matchId}`);
+    joinBtn.href = `https://t.me/playfftournamentbot?start=${preFilledMessage}`;
 </script>
 
 </body>
