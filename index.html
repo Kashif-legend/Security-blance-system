@@ -89,11 +89,21 @@
     const matchId = Math.floor(1000 + Math.random() * 9000);
     document.getElementById('match-id').innerHTML += matchId;
 
-    // Countdown timer
-    function startCountdown(endTime) {
+    // Countdown timer for a fixed match time (5:00 PM)
+    function startCountdown() {
+        const now = new Date();
+        const matchTime = new Date();
+
+        matchTime.setHours(17, 0, 0, 0); // Set match time to 5:00 PM
+
+        // If current time is past today's 5:00 PM, set the countdown for tomorrow's 5:00 PM
+        if (now > matchTime) {
+            matchTime.setDate(matchTime.getDate() + 1);
+        }
+
         const timerInterval = setInterval(function () {
             const now = new Date().getTime();
-            const distance = endTime - now;
+            const distance = matchTime - now;
 
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -108,14 +118,12 @@
         }, 1000);
     }
 
-    // Set countdown time (adjust hours and minutes as needed)
-    const matchTime = new Date();
-    matchTime.setHours(matchTime.getHours() + 1); // Match starts in 1 hour
-    startCountdown(matchTime.getTime());
+    // Start countdown
+    startCountdown();
 
     // Set Join button link with bot username and match ID
     const joinBtn = document.getElementById('join-btn');
-    joinBtn.href = `https://t.me/playfftournamentbot?start=${encodeURIComponent(`/joinmatch ${matchId}`)}`;
+    joinBtn.href = `https://t.me/playfftournamentbot?start=${encodeURIComponent(`/joinmatch${matchId}`)}`;
 </script>
 
 </body>
