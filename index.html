@@ -23,23 +23,9 @@
             text-align: center;
             position: relative;
         }
-        .match-image {
-            position: relative;
-        }
         .match-image img {
             width: 100%;
             height: auto;
-        }
-        .join-button {
-            position: absolute;
-            bottom: 10px;
-            left: 10px;
-            background-color: #28a745;
-            color: #fff;
-            padding: 5px 10px;
-            font-size: 14px;
-            border-radius: 5px;
-            text-decoration: none;
         }
         .match-details {
             padding: 20px;
@@ -60,6 +46,16 @@
             font-weight: bold;
             margin-top: 10px;
         }
+        .join-button {
+            display: block;
+            background-color: #28a745;
+            color: #fff;
+            padding: 10px;
+            font-size: 14px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
@@ -67,7 +63,6 @@
 <div class="match-container">
     <div class="match-image">
         <img src="your-image-url.jpg" alt="Match Image">
-        <a id="join-btn" href="#" class="join-button">Join</a>
     </div>
     <div class="match-details">
         <h3>Match Details</h3>
@@ -85,6 +80,7 @@
             <span>Time:</span> <span>5:00 PM</span>
         </div>
         <div id="timer" class="countdown-timer">Time Remaining: 00:00:00</div>
+        <a id="join-btn" href="#" class="join-button">Join Match</a>
     </div>
 </div>
 
@@ -94,31 +90,32 @@
     document.getElementById('match-id').innerHTML += matchId;
 
     // Countdown timer
-    function startCountdown(duration) {
-        let timer = duration, hours, minutes, seconds;
-        setInterval(function () {
-            hours = Math.floor(timer / 3600);
-            minutes = Math.floor((timer % 3600) / 60);
-            seconds = timer % 60;
+    function startCountdown(endTime) {
+        const timerInterval = setInterval(function () {
+            const now = new Date().getTime();
+            const distance = endTime - now;
 
-            hours = hours < 10 ? "0" + hours : hours;
-            minutes = minutes < 10 ? "0" + minutes : minutes;
-            seconds = seconds < 10 ? "0" + seconds : seconds;
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
             document.getElementById('timer').textContent = `Time Remaining: ${hours}:${minutes}:${seconds}`;
 
-            if (--timer < 0) {
+            if (distance < 0) {
+                clearInterval(timerInterval);
                 document.getElementById('timer').textContent = "Match has started!";
-                clearInterval(this);
             }
         }, 1000);
     }
 
-    // Set countdown timer to 1 hour for demonstration (3600 seconds)
-    startCountdown(3600);
+    // Set countdown time (adjust hours and minutes as needed)
+    const matchTime = new Date();
+    matchTime.setHours(matchTime.getHours() + 1); // Match starts in 1 hour
+    startCountdown(matchTime.getTime());
 
     // Set Join button link with bot username and match ID
-    document.getElementById('join-btn').href = `https://t.me/playfftournamentbot?start=/joinmatch${matchId}`;
+    const joinBtn = document.getElementById('join-btn');
+    joinBtn.href = `https://t.me/playfftournamentbot?start=${encodeURIComponent(`/joinmatch ${matchId}`)}`;
 </script>
 
 </body>
