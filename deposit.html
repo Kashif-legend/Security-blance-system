@@ -156,21 +156,8 @@
 
 <div class="payment-container">
     <h2>Make a Payment</h2>
-    <label for="amount">Enter Amount</label>
-    <input type="number" id="amount" class="input-field" placeholder="Enter amount" required>
-    <button class="button" onclick="showPaymentOptions()">Continue</button>
 
-    <!-- Suggested Amounts -->
-    <div id="suggestedAmounts" class="suggested-amounts">
-        <button onclick="suggestAmount(10)">₹10</button>
-        <button onclick="suggestAmount(20)">₹20</button>
-        <button onclick="suggestAmount(50)">₹50</button>
-        <button onclick="suggestAmount(100)">₹100</button>
-        <button onclick="suggestAmount(200)">₹200</button>
-        <button onclick="suggestAmount(500)">₹500</button>
-        <button onclick="suggestAmount(1000)">₹1000</button>
-    </div>
-
+    <!-- Amount display will be handled from the URL -->
     <div id="paymentOptions">
         <label for="paymentMethod">Select Payment Method</label>
 
@@ -198,10 +185,11 @@
 
     let selectedPaymentMethod = "";
 
-    function showPaymentOptions() {
-        const amount = document.getElementById('amount').value || getAmountFromUrl(); // Get amount from input or URL
+    // Automatically show the payment options and generate the QR Code using the URL amount
+    window.onload = function () {
+        const amount = getAmountFromUrl(); // Get amount from URL
         if (!amount || amount <= 0) {
-            alert("Please enter a valid amount.");
+            alert("Invalid or missing amount.");
             return;
         }
 
@@ -216,15 +204,10 @@
         document.getElementById('qrCodeContainer').style.display = "block";
     }
 
-    // Function to handle suggested amounts
-    function suggestAmount(amount) {
-        document.getElementById('amount').value = amount;
-    }
-
     function openPaymentApp(method) {
-        const amount = document.getElementById('amount').value || getAmountFromUrl(); // Get amount from input or URL
+        const amount = getAmountFromUrl(); // Get amount from URL
         if (!amount || amount <= 0) {
-            alert("Please enter a valid amount.");
+            alert("Invalid or missing amount.");
             return;
         }
 
