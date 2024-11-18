@@ -81,6 +81,7 @@
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
         }
 
+        /* Suggested Amount Box */
         .suggested-amounts {
             display: flex;
             flex-wrap: wrap;
@@ -128,6 +129,27 @@
                 opacity: 1;
             }
         }
+
+        /* Updated Payment Method Image Styles */
+        .payment-images {
+            display: flex;
+            flex-direction: column; /* Stack images vertically */
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .payment-image {
+            cursor: pointer;
+            width: 120px;
+            height: 60px;
+            margin: 10px 0; /* Added margin between the images */
+            transition: transform 0.3s ease;
+        }
+
+        .payment-image:hover {
+            transform: scale(1.1);
+        }
+
     </style>
 </head>
 <body>
@@ -164,27 +186,28 @@
             <h3>Scan to Pay</h3>
             <img id="qrCode" alt="QR Code">
         </div>
-
-        <!-- Open Telegram Bot Button -->
-        <button class="button" onclick="openTelegramBot()">Open Telegram Bot</button>
     </div>
 </div>
 
 <script>
+    // Function to fetch amount from the URL query parameter
+    function getAmountFromUrl() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return urlParams.get('amount');
+    }
+
     let selectedPaymentMethod = "";
 
     function showPaymentOptions() {
-        const amount = document.getElementById('amount').value;
+        const amount = document.getElementById('amount').value || getAmountFromUrl(); // Get amount from input or URL
         if (!amount || amount <= 0) {
             alert("Please enter a valid amount.");
             return;
         }
 
-        // Show the payment options section
         document.getElementById('paymentOptions').style.display = "block";
         document.getElementById('paymentOptions').style.opacity = 1;
 
-        // Generate UPI QR Code
         const upiId = "mktrader68@ybl";
         const qrData = `upi://pay?pa=${upiId}&pn=YourName&am=${amount}`;
         const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrData)}`;
@@ -199,7 +222,7 @@
     }
 
     function openPaymentApp(method) {
-        const amount = document.getElementById('amount').value;
+        const amount = document.getElementById('amount').value || getAmountFromUrl(); // Get amount from input or URL
         if (!amount || amount <= 0) {
             alert("Please enter a valid amount.");
             return;
@@ -228,12 +251,6 @@
 
         // Redirect to the selected payment app
         window.location.href = redirectUrl;
-    }
-
-    function openTelegramBot() {
-        // Replace with your Telegram bot link
-        const botLink = "https://t.me/your_bot_username"; 
-        window.open(botLink, "_blank");
     }
 </script>
 
