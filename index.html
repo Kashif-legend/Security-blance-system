@@ -3,110 +3,238 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Match Details</title>
+    <title>Dynamic Payment Page</title>
     <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Main Styling */
         body {
             font-family: Arial, sans-serif;
-            text-align: center;
-            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #74b9ff, #a29bfe);
+            overflow: hidden;
         }
-        .container {
-            width: 100%;
+
+        .payment-container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
             max-width: 400px;
-            margin: 20px auto;
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .match-image {
             width: 100%;
-            border-radius: 8px;
+            text-align: center;
+            transition: transform 0.3s ease-in-out;
+            animation: slideIn 0.5s ease forwards;
+            transform: translateY(50px);
+            opacity: 0;
         }
-        .match-details {
-            text-align: left;
-            margin-top: 10px;
-            font-size: 1.1em;
+
+        .payment-container h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
         }
-        #timer {
-            font-size: 1.2em;
-            margin: 15px 0;
-            color: #ff6347;
+
+        .input-field, .button {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            transition: box-shadow 0.3s ease;
         }
-        .join-button {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 1.1em;
+
+        .input-field:focus {
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            outline: none;
+        }
+
+        .button {
+            background-color: #6c5ce7;
             color: white;
-            background-color: #28a745;
+            font-size: 18px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .button:hover {
+            background-color: #4e3ecf;
+            transform: translateY(-2px);
+        }
+
+        .qr-code img {
+            width: 150px;
+            height: 150px;
+            margin: 15px 0;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .suggested-amounts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .suggested-amounts button {
+            padding: 10px 20px;
+            background-color: #74b9ff;
+            color: #fff;
             border: none;
             border-radius: 5px;
-            text-decoration: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .suggested-amounts button:hover {
+            background-color: #6c5ce7;
+        }
+
+        #paymentOptions, .qr-code {
+            display: none;
+            opacity: 0;
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <img src="https://i.imgur.com/mogjwdb.jpeg" alt="Match Image" class="match-image">
-    <div id="timer">Time Remaining: Calculating...</div>
-    <div class="match-details">
-        <p><strong>Match ID:</strong> <span id="match-id"></span></p>
-        <p><strong>Entry Fee:</strong> ₹50</p>
-        <p><strong>Map:</strong> Bermuda</p>
-        <p><strong>Per Kill:</strong> ₹10</p>
-        <p><strong>Time:</strong> 5:00 PM</p>
-        <p><strong>Game:</strong> Free Fire</p>
+<div class="payment-container">
+    <h2>Make a Payment</h2>
+    <label for="amount">Enter Amount</label>
+    <input type="number" id="amount" class="input-field" placeholder="Enter amount" required>
+    <button class="button" onclick="showPaymentOptions()">Continue</button>
+
+    <!-- Suggested Amounts -->
+    <div id="suggestedAmounts" class="suggested-amounts">
+        <button onclick="suggestAmount(10)">₹10</button>
+        <button onclick="suggestAmount(20)">₹20</button>
+        <button onclick="suggestAmount(50)">₹50</button>
+        <button onclick="suggestAmount(100)">₹100</button>
+        <button onclick="suggestAmount(200)">₹200</button>
+        <button onclick="suggestAmount(500)">₹500</button>
+        <button onclick="suggestAmount(1000)">₹1000</button>
     </div>
-    <a id="join-btn" href="#" class="join-button">Join Match</a>
+
+    <div id="paymentOptions">
+        <label for="paymentMethod">Select Payment Method</label>
+
+        <!-- Payment Method Images (stacked vertically) -->
+        <div class="payment-images">
+            <img class="payment-image" src="https://i.imgur.com/0opwZc5.png" alt="Paytm" onclick="openPaymentApp('paytm')">
+            <img class="payment-image" src="https://i.imgur.com/TuudHFC.png" alt="Google Pay" onclick="openPaymentApp('googlepay')">
+            <img class="payment-image" src="https://i.imgur.com/IUrHFYl.png" alt="PhonePe" onclick="openPaymentApp('phonepe')">
+            <img class="payment-image" src="https://i.imgur.com/TuudHFC.png" alt="UPI" onclick="openPaymentApp('upi')">
+        </div>
+
+        <div class="qr-code" id="qrCodeContainer">
+            <h3>Scan to Pay</h3>
+            <img id="qrCode" alt="QR Code">
+        </div>
+
+        <!-- Open Telegram Bot Button -->
+        <button class="button" onclick="openTelegramBot()">Open Telegram Bot</button>
+    </div>
 </div>
 
 <script>
-    // Generate unique 4-digit Match ID
-    const matchId = Math.floor(1000 + Math.random() * 9000);
-    document.getElementById('match-id').textContent = matchId;
+    let selectedPaymentMethod = "";
 
-    // Countdown timer
-    function startCountdown() {
-        const now = new Date();
-        const matchTime = new Date();
-
-        // Set the match time to 5:00 PM today
-        matchTime.setHours(17, 0, 0, 0);
-
-        // If it's past 5:00 PM, set match time to 5:00 PM tomorrow
-        if (now > matchTime) {
-            matchTime.setDate(matchTime.getDate() + 1);
+    function showPaymentOptions() {
+        const amount = document.getElementById('amount').value;
+        if (!amount || amount <= 0) {
+            alert("Please enter a valid amount.");
+            return;
         }
 
-        const timerInterval = setInterval(function () {
-            const now = new Date().getTime();
-            const distance = matchTime - now;
+        // Show the payment options section
+        document.getElementById('paymentOptions').style.display = "block";
+        document.getElementById('paymentOptions').style.opacity = 1;
 
-            // Calculate hours, minutes, and seconds
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        // Generate UPI QR Code
+        const upiId = "mktrader68@ybl";
+        const qrData = `upi://pay?pa=${upiId}&pn=YourName&am=${amount}`;
+        const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(qrData)}`;
 
-            // Display the result
-            document.getElementById('timer').textContent = `Time Remaining: ${hours}:${minutes}:${seconds}`;
-
-            // If the countdown is over
-            if (distance < 0) {
-                clearInterval(timerInterval);
-                document.getElementById('timer').textContent = "Match has started!";
-            }
-        }, 1000);
+        document.getElementById('qrCode').src = qrUrl;
+        document.getElementById('qrCodeContainer').style.display = "block";
     }
 
-    // Start the countdown timer
-    startCountdown();
+    // Function to handle suggested amounts
+    function suggestAmount(amount) {
+        document.getElementById('amount').value = amount;
+    }
 
-    // Updated Join button link with encoded message
-    const joinBtn = document.getElementById('join-btn');
-    const preFilledMessage = encodeURIComponent(`/joinmatch ${matchId}`);
-    joinBtn.href = `https://t.me/playfftournamentbot?start=${preFilledMessage}`;
+    function openPaymentApp(method) {
+        const amount = document.getElementById('amount').value;
+        if (!amount || amount <= 0) {
+            alert("Please enter a valid amount.");
+            return;
+        }
+
+        const upiId = "mktrader68@ybl";
+        let redirectUrl;
+
+        switch (method) {
+            case "paytm":
+                redirectUrl = `paytmmp://cash_wallet?featuretype=money_transfer&upi://pay?ver=01&mode=01&pa=${upiId}&pn=YourName&mc=5192&qrMedium=06&tn=Payment&am=${amount}`;
+                break;
+            case "googlepay":
+                redirectUrl = `upi://pay?pa=${upiId}&pn=YourName&am=${amount}`;
+                break;
+            case "phonepe":
+                redirectUrl = `phonepe://pay?pa=${upiId}&pn=YourName&am=${amount}`;
+                break;
+            case "upi":
+                redirectUrl = `upi://pay?pa=${upiId}&pn=YourName&am=${amount}`;
+                break;
+            default:
+                alert("Invalid payment method.");
+                return;
+        }
+
+        // Redirect to the selected payment app
+        window.location.href = redirectUrl;
+    }
+
+    function openTelegramBot() {
+        // Replace with your Telegram bot link
+        const botLink = "https://t.me/your_bot_username"; 
+        window.open(botLink, "_blank");
+    }
 </script>
 
 </body>
